@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -26,21 +26,21 @@ public class SpellcheckerPlugin implements Plugin {
     private SpellcheckerPreference preference;
 
     public boolean canShutDown() {
-	return true;
+        return true;
     }
 
     public void initialize() {
 
-	try {
-	    preference = SpellcheckManager.getInstance()
-		    .getSpellcheckerPreference();
-	    SparkManager.getPreferenceManager().addPreference(preference);
+        try {
+            preference = SpellcheckManager.getInstance()
+                .getSpellcheckerPreference();
+            SparkManager.getPreferenceManager().addPreference(preference);
 
-	    listener = new SpellcheckChatRoomListener();
-	    SparkManager.getChatManager().addChatRoomListener(listener);
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+            listener = new SpellcheckChatRoomListener();
+            SparkManager.getChatManager().addChatRoomListener(listener);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void shutdown() {
@@ -48,7 +48,7 @@ public class SpellcheckerPlugin implements Plugin {
     }
 
     public void uninstall() {
-	SparkManager.getChatManager().removeChatRoomListener(listener);
+        SparkManager.getChatManager().removeChatRoomListener(listener);
     }
 
 }

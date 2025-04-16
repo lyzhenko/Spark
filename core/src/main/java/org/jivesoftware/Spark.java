@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -34,6 +34,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Locale;
+
 import org.jivesoftware.gui.LoginUIPanel;
 
 
@@ -47,9 +48,7 @@ import org.jivesoftware.gui.LoginUIPanel;
 public final class Spark {
 
 
-
     private static String USER_SPARK_HOME;
-
 
 
     public static String ARGUMENTS;
@@ -69,25 +68,25 @@ public final class Spark {
 
     }
 
-    private static synchronized File initializeDirectory(File directoryHome, String directoryName){
-    	File targetDir = new File(directoryHome, directoryName).getAbsoluteFile();
-        if(!targetDir.exists()){
-        	targetDir.mkdirs();
+    private static synchronized File initializeDirectory(File directoryHome, String directoryName) {
+        File targetDir = new File(directoryHome, directoryName).getAbsoluteFile();
+        if (!targetDir.exists()) {
+            targetDir.mkdirs();
         }
         return targetDir;
     }
-    
-    
-    private static synchronized File initializeDirectory(String directoryName){
-    	return initializeDirectory(new File(USER_SPARK_HOME), directoryName);
+
+
+    private static synchronized File initializeDirectory(String directoryName) {
+        return initializeDirectory(new File(USER_SPARK_HOME), directoryName);
     }
-    
+
     public void startup() {
-	if (System.getenv("APPDATA") != null && !System.getenv("APPDATA").equals("")) {
-	    USER_SPARK_HOME = System.getenv("APPDATA") + "/" + getUserConf();
-	} else {
-	    USER_SPARK_HOME = System.getProperties().getProperty("user.home") + "/" + getUserConf();
-	}
+        if (System.getenv("APPDATA") != null && !System.getenv("APPDATA").equals("")) {
+            USER_SPARK_HOME = System.getenv("APPDATA") + "/" + getUserConf();
+        } else {
+            USER_SPARK_HOME = System.getProperties().getProperty("user.home") + "/" + getUserConf();
+        }
 
         String current = System.getProperty("java.library.path");
         String classPath = System.getProperty("java.class.path");
@@ -100,33 +99,33 @@ public final class Spark {
         buf.append(current);
         buf.append(";");
 
-    	SparkCompatibility sparkCompat = new SparkCompatibility();
-    	try {
-    		// Absolute paths to a collection of files or directories to skip
-			Collection<String> skipFiles = new HashSet<>();
-			skipFiles.add(new File(USER_SPARK_HOME, "plugins").getAbsolutePath());
+        SparkCompatibility sparkCompat = new SparkCompatibility();
+        try {
+            // Absolute paths to a collection of files or directories to skip
+            Collection<String> skipFiles = new HashSet<>();
+            skipFiles.add(new File(USER_SPARK_HOME, "plugins").getAbsolutePath());
 
-    		sparkCompat.transferConfig(USER_SPARK_HOME, skipFiles);
-    	} catch (IOException e) {
-    		// Do nothing
-    	}
+            sparkCompat.transferConfig(USER_SPARK_HOME, skipFiles);
+        } catch (IOException e) {
+            // Do nothing
+        }
 
-    	
-    	RESOURCE_DIRECTORY = initializeDirectory("resources");
-    	BIN_DIRECTORY = initializeDirectory("bin");
-    	LOG_DIRECTORY = initializeDirectory("logs");
-        File USER_DIRECTORY = initializeDirectory( "user" );
-    	PLUGIN_DIRECTORY = initializeDirectory("plugins");
-        File XTRA_DIRECTORY = initializeDirectory( "xtra" );
+
+        RESOURCE_DIRECTORY = initializeDirectory("resources");
+        BIN_DIRECTORY = initializeDirectory("bin");
+        LOG_DIRECTORY = initializeDirectory("logs");
+        File USER_DIRECTORY = initializeDirectory("user");
+        PLUGIN_DIRECTORY = initializeDirectory("plugins");
+        File XTRA_DIRECTORY = initializeDirectory("xtra");
         SECURITY_DIRECTORY = initializeDirectory("security");
-    	// TODO implement copyEmoticonFiles();
+        // TODO implement copyEmoticonFiles();
         final String workingDirectory = System.getProperty("appdir");
-        
+
         if (workingDirectory == null) {
-            System.out.println( "Warning: no working directory set. This might cause updated data to be missed. Please set a system property 'appdir' to the location where Spark is installed to correct this." );
+            System.out.println("Warning: no working directory set. This might cause updated data to be missed. Please set a system property 'appdir' to the location where Spark is installed to correct this.");
             if (!RESOURCE_DIRECTORY.exists() || !LOG_DIRECTORY.exists() || !USER_DIRECTORY.exists() || !PLUGIN_DIRECTORY.exists() || !XTRA_DIRECTORY.exists() || !SECURITY_DIRECTORY.exists()) {
-            	UIManager.put("OptionPane.okButtonText", Res.getString("ok"));
-            	JOptionPane.showMessageDialog(new JFrame(), "Unable to create directories necessary for runtime.", "Spark Error", JOptionPane.ERROR_MESSAGE);
+                UIManager.put("OptionPane.okButtonText", Res.getString("ok"));
+                JOptionPane.showMessageDialog(new JFrame(), "Unable to create directories necessary for runtime.", "Spark Error", JOptionPane.ERROR_MESSAGE);
                 System.exit(1);
             }
         }
@@ -137,10 +136,10 @@ public final class Spark {
             File workingDir = new File(workingDirectory);
             RESOURCE_DIRECTORY = initializeDirectory(workingDir, "resources");
             BIN_DIRECTORY = initializeDirectory(workingDir, "bin");
-            File emoticons = new File( XTRA_DIRECTORY, "emoticons").getAbsoluteFile();
-            if(!emoticons.exists() || emoticons.listFiles() == null || emoticons.listFiles().length == 0 ){
+            File emoticons = new File(XTRA_DIRECTORY, "emoticons").getAbsoluteFile();
+            if (!emoticons.exists() || emoticons.listFiles() == null || emoticons.listFiles().length == 0) {
                 copyEmoticonFiles(workingDirectory);
-            	//Copy emoticon files from install directory to the spark user home directory
+                //Copy emoticon files from install directory to the spark user home directory
             }
             SECURITY_DIRECTORY = initializeDirectory(workingDir, "security");
             LOG_DIRECTORY = initializeDirectory("logs");
@@ -148,8 +147,7 @@ public final class Spark {
             LOG_DIRECTORY.mkdirs();
             try {
                 buf.append(RESOURCE_DIRECTORY.getCanonicalPath()).append(";");
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -183,13 +181,12 @@ public final class Spark {
         }
 
         try {
-	        EventQueue.invokeAndWait(() -> {
-            final LoginUIPanel dialog = UIComponentRegistry.createLoginDialog();
+            EventQueue.invokeAndWait(() -> {
+                final LoginUIPanel dialog = UIComponentRegistry.createLoginDialog();
                 dialog.invoke(new JFrame());
-            } );
-        }
-        catch(Exception ex) {
-        	ex.printStackTrace();
+            });
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -225,7 +222,7 @@ public final class Spark {
      */
     public static boolean isMac() {
         String lcOSName = System.getProperty("os.name").toLowerCase();
-        return lcOSName.contains( "mac" );
+        return lcOSName.contains("mac");
     }
 
 
@@ -276,8 +273,8 @@ public final class Spark {
      * @return the bin directory.
      */
     public static File getBinDirectory() {
-    	if (BIN_DIRECTORY == null ) BIN_DIRECTORY = initializeDirectory("bin");
-    	return BIN_DIRECTORY;
+        if (BIN_DIRECTORY == null) BIN_DIRECTORY = initializeDirectory("bin");
+        return BIN_DIRECTORY;
     }
 
     /**
@@ -292,15 +289,15 @@ public final class Spark {
         return RESOURCE_DIRECTORY;
 
     }
-    
+
     /**
      * Returns the plugins directory of the Spark install. THe plugins-dir contains all the third-party plugins.
-     * 
+     *
      * @return the plugins directory
      */
     public static File getPluginDirectory() {
         if (PLUGIN_DIRECTORY == null) PLUGIN_DIRECTORY = initializeDirectory("plugins");
-        return PLUGIN_DIRECTORY; 
+        return PLUGIN_DIRECTORY;
     }
 
     /**
@@ -309,7 +306,7 @@ public final class Spark {
      * @return the log directory.
      */
     public static File getLogDirectory() {
-    	if (LOG_DIRECTORY == null )LOG_DIRECTORY = initializeDirectory("logs");
+        if (LOG_DIRECTORY == null) LOG_DIRECTORY = initializeDirectory("logs");
         return LOG_DIRECTORY;
     }
 
@@ -332,12 +329,9 @@ public final class Spark {
     public static String getUserConf() {
         if (isLinux()) {
             return Default.getString(Default.USER_DIRECTORY_LINUX);
-        }
-        else if(isMac())
-        {
+        } else if (isMac()) {
             return Default.getString(Default.USER_DIRECTORY_MAC);
-        }
-        else
+        } else
             return Default.getString(Default.USER_DIRECTORY_WINDOWS);
     }
 
@@ -362,31 +356,30 @@ public final class Spark {
     }
 
     public static boolean disableUpdatesOnCustom() {
-	return Default.getBoolean(Default.DISABLE_UPDATES);
+        return Default.getBoolean(Default.DISABLE_UPDATES);
     }
 
-	public static synchronized void setApplicationFont(Font f) {
+    public static synchronized void setApplicationFont(Font f) {
         UIDefaults defaults = UIManager.getLookAndFeelDefaults();
         for (Object ui_property : defaults.keySet()) {
             if (ui_property.toString().endsWith(".font")) {
                 UIManager.put(ui_property, f);
             }
         }
-	}
+    }
 
     /**
      * Sets Spark specific colors
      */
     public static void installBaseUIProperties() {
-    	setApplicationFont(new Font("Dialog", Font.PLAIN, 11));
+        setApplicationFont(new Font("Dialog", Font.PLAIN, 11));
         UIManager.put("ContactItem.border", BorderFactory.createLineBorder(Color.white));
         //UIManager.put("TextField.font", new Font("Dialog", Font.PLAIN, 11));
         //UIManager.put("Label.font", new Font("Dialog", Font.PLAIN, 11));
 
         ColorSettings colorsettings = ColorSettingManager.getColorSettings();
 
-        for(String property : colorsettings.getKeys())
-        {
+        for (String property : colorsettings.getKeys()) {
             Color c = colorsettings.getColorFromProperty(property);
             UIManager.put(property, c);
         }
@@ -410,19 +403,17 @@ public final class Spark {
             }
         }
     }
-   public void copyEmoticonFiles(String workdir) {
+
+    public void copyEmoticonFiles(String workdir) {
         // Current Plugin directory
         File newEmoticonDir = new File(Spark.getLogDirectory().getParentFile(), "xtra" + File.separator + "emoticons").getAbsoluteFile();
         newEmoticonDir.mkdirs();
 
-        File EMOTICON_DIRECTORY = new File(workdir + File.separator + "xtra" +  File.separator+"emoticons");
+        File EMOTICON_DIRECTORY = new File(workdir + File.separator + "xtra" + File.separator + "emoticons");
 
-        if (EMOTICON_DIRECTORY.listFiles() != null)
-        {
-            for ( File file : EMOTICON_DIRECTORY.listFiles() )
-            {
-                if ( file.isFile() )
-                {
+        if (EMOTICON_DIRECTORY.listFiles() != null) {
+            for (File file : EMOTICON_DIRECTORY.listFiles()) {
+                if (file.isFile()) {
                     // Copy over
                     File newFile = new File(newEmoticonDir, file.getName());
                 }

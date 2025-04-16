@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,11 +36,11 @@ public class Installer implements InstallAction {
 
 
     @Override
-	public void init(Context context) {
+    public void init(Context context) {
     }
 
     @Override
-	public boolean install(InstallerContext installerContext) {
+    public boolean install(InstallerContext installerContext) {
         final String osName = System.getProperty("os.name").toLowerCase();
         boolean isWindows = osName.startsWith("windows");
 
@@ -54,8 +54,7 @@ public class Installer implements InstallAction {
             sparkDirectory = new File(installerContext.getInstallationDirectory(), "Spark.exe");
             sparkPath = sparkDirectory.getCanonicalPath();
 
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -72,13 +71,12 @@ public class Installer implements InstallAction {
     }
 
     @Override
-	public void rollback(InstallerContext installerContext) {
+    public void rollback(InstallerContext installerContext) {
         WinRegistry.deleteValue(RegistryRoot.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Spark");
     }
 
     @Override
-    public boolean isRollbackSupported()
-    {
+    public boolean isRollbackSupported() {
         return true;
     }
 
@@ -90,8 +88,7 @@ public class Installer implements InstallAction {
     public void addSparkToStartup(String sparkPath) {
         try {
             WinRegistry.setValue(RegistryRoot.HKEY_CURRENT_USER, "Software\\Microsoft\\Windows\\CurrentVersion\\Run", "Spark", sparkPath);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
