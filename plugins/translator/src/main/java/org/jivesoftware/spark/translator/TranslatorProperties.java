@@ -65,6 +65,7 @@ public class TranslatorProperties {
     public boolean getEnabledTranslator(){
         return getBoolean(ACTIVE,false);
     }
+
     public void setEnabledTranslator(boolean enable){
         setBoolean(ACTIVE,enable);
     }
@@ -84,7 +85,6 @@ public class TranslatorProperties {
     public void setUrl(String url){
         props.setProperty(URL,url);
     }
-
 
     public boolean getBoolean(String property, boolean defaultValue) {
         return Boolean.parseBoolean(props.getProperty(property, Boolean.toString(defaultValue)));

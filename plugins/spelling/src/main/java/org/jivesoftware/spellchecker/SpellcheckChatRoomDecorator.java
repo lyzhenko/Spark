@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,6 +25,7 @@ import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+
 import org.jivesoftware.spark.util.SwingWorker;
 import org.dts.spell.SpellChecker;
 import org.dts.spell.swing.JTextComponentSpellChecker;
@@ -39,7 +40,7 @@ import org.jivesoftware.spark.util.GraphicUtils;
  * ActionListener to react on buttonclicks
  */
 public class SpellcheckChatRoomDecorator implements ActionListener,
-	ChatRoomClosingListener {
+    ChatRoomClosingListener {
     private JTextComponentSpellChecker _sc;
     private RolloverButton _spellingButton;
     private ChatRoom _room;
@@ -47,35 +48,34 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
     private Map<String, String> _languages;
 
     public SpellcheckChatRoomDecorator(ChatRoom room) {
-	_room = room; 
+        _room = room;
 
-	SwingWorker worker = new SwingWorker() {
-	    public Object construct() {
+        SwingWorker worker = new SwingWorker() {
+            public Object construct() {
 
-		return true;
-	    }
+                return true;
+            }
 
-	    public void finished() {
+            public void finished() {
 
-		final SpellcheckerPreference preference = (SpellcheckerPreference) SparkManager
-			.getPreferenceManager().getPreference(
-				SpellcheckerPreference.NAMESPACE);
-		if (preference.getPreferences().isSpellCheckerEnabled()) {
-		    _sc = new JTextComponentSpellChecker(SpellcheckManager
-			    .getInstance().getSpellChecker());
+                final SpellcheckerPreference preference = (SpellcheckerPreference) SparkManager
+                    .getPreferenceManager().getPreference(
+                        SpellcheckerPreference.NAMESPACE);
+                if (preference.getPreferences().isSpellCheckerEnabled()) {
+                    _sc = new JTextComponentSpellChecker(SpellcheckManager
+                        .getInstance().getSpellChecker());
 
-		    languagestoLocales();
-		    
-		    _languageSelection.addActionListener(new ActionListener() {
-                        
-		        
-		        
+                    languagestoLocales();
+
+                    _languageSelection.addActionListener(new ActionListener() {
+
+
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            String lang = _languages.get((String)_languageSelection.getSelectedItem());
+                            String lang = _languages.get((String) _languageSelection.getSelectedItem());
                             _sc.stopRealtimeMarkErrors();
                             _sc = new JTextComponentSpellChecker(new SpellChecker(SpellcheckManager.getInstance().getDictionary(lang)));
-                           
+
                             if (preference.getPreferences().getIgnoreUppercase()) {
                                 _sc.getSpellChecker().setIgnoreUpperCaseWords(true);
                                 _sc.getSpellChecker().setCaseSensitive(false);
@@ -86,50 +86,49 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
                             _sc.startRealtimeMarkErrors(_room.getChatInputEditor());
                         }
                     });
-		    
-		    
-		    ClassLoader cl = getClass().getClassLoader();
 
-		    ImageIcon spellingIcon = new ImageIcon(
-			    cl.getResource("text_ok.png"));
-		    _spellingButton = new RolloverButton(spellingIcon);
-		    _spellingButton.setToolTipText(GraphicUtils
-			    .createToolTip(SpellcheckerResource.getString("button.check.spelling")));
-		    _spellingButton
-			    .addActionListener(SpellcheckChatRoomDecorator.this);
-		    _room.getEditorBar().add(_spellingButton);
-                    if (preference.getPreferences().getLanguageSelectionInChatRoom())
-                    {
+
+                    ClassLoader cl = getClass().getClassLoader();
+
+                    ImageIcon spellingIcon = new ImageIcon(
+                        cl.getResource("text_ok.png"));
+                    _spellingButton = new RolloverButton(spellingIcon);
+                    _spellingButton.setToolTipText(GraphicUtils
+                        .createToolTip(SpellcheckerResource.getString("button.check.spelling")));
+                    _spellingButton
+                        .addActionListener(SpellcheckChatRoomDecorator.this);
+                    _room.getEditorBar().add(_spellingButton);
+                    if (preference.getPreferences().getLanguageSelectionInChatRoom()) {
                         _room.getEditorBar().add(_languageSelection);
                     }
-		    if (preference.getPreferences().getIgnoreUppercase()) {
-			_sc.getSpellChecker().setIgnoreUpperCaseWords(true);
-			_sc.getSpellChecker().setCaseSensitive(false);
-		    } else {
-			_sc.getSpellChecker().setIgnoreUpperCaseWords(false);
-			_sc.getSpellChecker().setCaseSensitive(true);
-		    }
+                    if (preference.getPreferences().getIgnoreUppercase()) {
+                        _sc.getSpellChecker().setIgnoreUpperCaseWords(true);
+                        _sc.getSpellChecker().setCaseSensitive(false);
+                    } else {
+                        _sc.getSpellChecker().setIgnoreUpperCaseWords(false);
+                        _sc.getSpellChecker().setCaseSensitive(true);
+                    }
 
-		    if (preference.getPreferences().isAutoSpellCheckerEnabled()) {
-			_sc.startRealtimeMarkErrors(_room.getChatInputEditor());
-		    }
-		}
-	    }
+                    if (preference.getPreferences().isAutoSpellCheckerEnabled()) {
+                        _sc.startRealtimeMarkErrors(_room.getChatInputEditor());
+                    }
+                }
+            }
 
-	};
+        };
 
-	worker.start();
+        worker.start();
 
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-	if (_sc.spellCheck(_room.getChatInputEditor())) {
-	    JOptionPane.showMessageDialog(_room.getChatInputEditor(),
-	            SpellcheckerResource
-	                .getString("dialog.no.mistakes"));
-	    _room.getChatInputEditor().requestFocusInWindow();
-	}
+        if (_sc.spellCheck(_room.getChatInputEditor())) {
+            JOptionPane.showMessageDialog(_room.getChatInputEditor(),
+                SpellcheckerResource
+                    .getString("dialog.no.mistakes"));
+            _room.getChatInputEditor().requestFocusInWindow();
+        }
 
     }
 
@@ -138,8 +137,7 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
 
     }
 
-    private void languagestoLocales()
-    {
+    private void languagestoLocales() {
         String spellLanguage = SpellcheckManager.getInstance().getSpellcheckerPreference().getPreferences().getSpellLanguage();
         _languages = new HashMap<>();
         Locale[] locales = Locale.getAvailableLocales();

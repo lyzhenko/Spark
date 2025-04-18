@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -38,92 +38,92 @@ public class SpellcheckManager {
     private SpellcheckerPreference preferences;
 
     public static SpellcheckManager getInstance() {
-	if (instance == null) {
-	    instance = new SpellcheckManager();
-	}
+        if (instance == null) {
+            instance = new SpellcheckManager();
+        }
 
-	return instance;
+        return instance;
     }
 
     private SpellcheckManager() {
 
-	loadSupportedLanguages();
+        loadSupportedLanguages();
 
-	try {
-	    preferences = new SpellcheckerPreference(languages);
+        try {
+            preferences = new SpellcheckerPreference(languages);
 
-	    String language = SparkManager.getMainWindow().getLocale()
-		    .getLanguage();
-	    if (preferences.getPreferences().getSpellLanguage() != null) {
-		language = preferences.getPreferences().getSpellLanguage();
-	    }
+            String language = SparkManager.getMainWindow().getLocale()
+                .getLanguage();
+            if (preferences.getPreferences().getSpellLanguage() != null) {
+                language = preferences.getPreferences().getSpellLanguage();
+            }
 
-	    checker = new SpellChecker(getDictionary(language));
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+            checker = new SpellChecker(getDictionary(language));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
     public void loadDictionary(String language) {
-	checker.setDictionary(getDictionary(language));
+        checker.setDictionary(getDictionary(language));
     }
 
     public SpellDictionary getDictionary(String language) {
-	SpellDictionary dict = null;
-	try {
-	    InputStream dictionary = getClass().getClassLoader()
-		    .getResourceAsStream("dictionary/" + language + ".zip");
+        SpellDictionary dict = null;
+        try {
+            InputStream dictionary = getClass().getClassLoader()
+                .getResourceAsStream("dictionary/" + language + ".zip");
 
-	    if (dictionary == null)
-		Log.error("Dictionary not found");
+            if (dictionary == null)
+                Log.error("Dictionary not found");
 
-	    File personalDictionary = new File(SparkManager.getUserDirectory(),
-		    "personalDictionary.dict");
-	    dict = new OpenOfficeSpellDictionary(dictionary, personalDictionary);
-	} catch (IOException e) {
-	    e.printStackTrace();
-	}
-	return dict;
+            File personalDictionary = new File(SparkManager.getUserDirectory(),
+                "personalDictionary.dict");
+            dict = new OpenOfficeSpellDictionary(dictionary, personalDictionary);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return dict;
     }
 
     public SpellcheckerPreference getSpellcheckerPreference() {
-	return preferences;
+        return preferences;
     }
 
     public ArrayList<String> getSupportedLanguages() {
-	return languages;
+        return languages;
     }
 
     public SpellChecker getSpellChecker() {
-	return checker;
+        return checker;
     }
 
     private void loadSupportedLanguages() {
 
-	languages = new ArrayList<String>();
-	try {
-	    String qualifiedClassName = getClass().getName();
-	    Class<?> qc = Class.forName(qualifiedClassName);
-	    CodeSource source = qc.getProtectionDomain().getCodeSource();
+        languages = new ArrayList<String>();
+        try {
+            String qualifiedClassName = getClass().getName();
+            Class<?> qc = Class.forName(qualifiedClassName);
+            CodeSource source = qc.getProtectionDomain().getCodeSource();
 
-	    File jarFile = new File(source.getLocation().getFile());
-	    if (jarFile.exists() && jarFile.isFile()) {
-		ZipFile zipFile = new JarFile(jarFile);
-		for (Enumeration<?> e = zipFile.entries(); e.hasMoreElements();) {
-		    JarEntry entry = (JarEntry) e.nextElement();
+            File jarFile = new File(source.getLocation().getFile());
+            if (jarFile.exists() && jarFile.isFile()) {
+                ZipFile zipFile = new JarFile(jarFile);
+                for (Enumeration<?> e = zipFile.entries(); e.hasMoreElements(); ) {
+                    JarEntry entry = (JarEntry) e.nextElement();
 
-		    if (entry.getName().startsWith("dictionary/")
-			    && entry.getName().endsWith(".zip")) {
-			String languageFile = entry.getName().substring(11);
-			String lang = languageFile.substring(0,
-				languageFile.lastIndexOf(".zip"));
-			languages.add(lang);
-		    }
-		}
-	    }
-	} catch (Exception e) {
-	    e.printStackTrace();
-	}
+                    if (entry.getName().startsWith("dictionary/")
+                        && entry.getName().endsWith(".zip")) {
+                        String languageFile = entry.getName().substring(11);
+                        String lang = languageFile.substring(0,
+                            languageFile.lastIndexOf(".zip"));
+                        languages.add(lang);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

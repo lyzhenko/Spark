@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,10 +55,10 @@ public class TranslatorPlugin implements Plugin {
             public void chatRoomOpened(ChatRoom room) {
                 // only do the translation for single chat
                 if (room instanceof ChatRoomImpl && TranslatorProperties.getInstance().getEnabledTranslator()) {
-                    final ChatRoomImpl roomImpl = (ChatRoomImpl)room;
+                    final ChatRoomImpl roomImpl = (ChatRoomImpl) room;
 
                     //Set server LibreTranslate API
-                    if(TranslatorProperties.getInstance().getUseCustomUrl() && !StringUtils.isBlank(TranslatorProperties.getInstance().getUrl())){
+                    if (TranslatorProperties.getInstance().getUseCustomUrl() && !StringUtils.isBlank(TranslatorProperties.getInstance().getUrl())) {
                         Translator.setUrlApi(TranslatorProperties.getInstance().getUrl());
                     } else {
                         Translator.setUrlApi(TranslatorUtil.getDefaultUrl());
@@ -67,10 +67,10 @@ public class TranslatorPlugin implements Plugin {
                     // Create a new ChatRoomButton.
                     final JComboBox<Object> translatorBox = new JComboBox<>(TranslatorUtil.getLanguage());
 
-                    translatorBox.addActionListener( e -> {
+                    translatorBox.addActionListener(e -> {
                         // Set the focus back to the message box.
                         roomImpl.getChatInputEditor().requestFocusInWindow();
-                    } );
+                    });
 
                     roomImpl.addChatRoomComponent(translatorBox);
 
@@ -80,18 +80,18 @@ public class TranslatorPlugin implements Plugin {
                             String currentBody = message.getBody();
                             Language lang = (Language) translatorBox.getSelectedItem();
                             if (lang != null && lang != Language.NONE) {
-                            	message.setBody(null);
-                                TranscriptWindow transcriptWindow = chatManager.getChatRoom( message.getTo().asEntityBareJidOrThrow() ).getTranscriptWindow();
+                                message.setBody(null);
+                                TranscriptWindow transcriptWindow = chatManager.getChatRoom(message.getTo().asEntityBareJidOrThrow()).getTranscriptWindow();
                                 try {
                                     currentBody = TranslatorUtil.translate(currentBody, lang);
-                                    transcriptWindow.insertNotificationMessage("-> "+currentBody, Color.gray);
+                                    transcriptWindow.insertNotificationMessage("-> " + currentBody, Color.gray);
                                     message.setBody(currentBody);
-                                } catch (Exception e){
+                                } catch (Exception e) {
                                     transcriptWindow.insertNotificationMessage(TranslatorResource.getString("translator.error"), ChatManager.ERROR_COLOR);
                                 }
                             }
                         }
-                        
+
 
                         public void receivingMessage(Message message) {
                             // do nothing

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2004-2011 Jive Software. All rights reserved.
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,17 +66,17 @@ public class ChatManager {
     private static final Object LOCK = new Object();
 
     // Define Default Colors
-    public static final Color TO_COLOR = (Color)UIManager.get("User.foreground");
-    public static final Color FROM_COLOR = (Color)UIManager.get("OtherUser.foreground");
-    public static final Color NOTIFICATION_COLOR = (Color)UIManager.get("Notification.foreground");
-    public static final Color ERROR_COLOR = (Color)UIManager.get("Error.foreground");
+    public static final Color TO_COLOR = (Color) UIManager.get("User.foreground");
+    public static final Color FROM_COLOR = (Color) UIManager.get("OtherUser.foreground");
+    public static final Color NOTIFICATION_COLOR = (Color) UIManager.get("Notification.foreground");
+    public static final Color ERROR_COLOR = (Color) UIManager.get("Error.foreground");
 
-	public static final Color[] COLORS = { Color.blue, Color.gray, Color.magenta, Color.red, Color.PINK,
-			new Color(238, 153, 247), new Color(181, 0, 0), new Color(237, 150, 122), new Color(204, 51, 153),
-			new Color(0, 139, 139), new Color(218, 14, 0), new Color(147, 112, 219), new Color(205, 133, 63),
-			new Color(72, 160, 237), new Color(255, 140, 0), new Color(106, 90, 205), new Color(224, 165, 32),
-			new Color(255, 69, 0), new Color(255, 99, 72), new Color(109, 130, 180), new Color(233, 0, 0),
-			new Color(255, 127, 80), new Color(140, 105, 225), new Color(173, 205, 50) };
+    public static final Color[] COLORS = {Color.blue, Color.gray, Color.magenta, Color.red, Color.PINK,
+        new Color(238, 153, 247), new Color(181, 0, 0), new Color(237, 150, 122), new Color(204, 51, 153),
+        new Color(0, 139, 139), new Color(218, 14, 0), new Color(147, 112, 219), new Color(205, 133, 63),
+        new Color(72, 160, 237), new Color(255, 140, 0), new Color(106, 90, 205), new Color(224, 165, 32),
+        new Color(255, 69, 0), new Color(255, 99, 72), new Color(109, 130, 180), new Color(233, 0, 0),
+        new Color(255, 127, 80), new Color(140, 105, 225), new Color(173, 205, 50)};
     private final List<MessageFilter> messageFilters = new ArrayList<>();
 
     private final List<GlobalMessageListener> globalMessageListeners = new ArrayList<>();
@@ -97,9 +97,9 @@ public class ChatManager {
     private final Set<ChatRoom> typingNotificationList = new HashSet<>();
 
     private final UriManager _uriManager = new UriManager();
-    
+
     private final List<ChatMessageHandler> chatMessageHandlers = new ArrayList<>();
-    
+
     /**
      * The listener instance that we use to track chat states according to
      * XEP-0085;
@@ -131,7 +131,7 @@ public class ChatManager {
      * Create a new instance of ChatManager.
      */
     private ChatManager() {
-        chatContainer = UIComponentRegistry.createChatContainer();        
+        chatContainer = UIComponentRegistry.createChatContainer();
 
         // Add Default Chat Room Decorator
         addSparkTabHandler(new DefaultTabHandler());
@@ -180,12 +180,12 @@ public class ChatManager {
         return chatContainer;
     }
 
-	public GroupChatRoom getGroupChat(EntityBareJid roomAddress) throws ChatNotFoundException {
-        if ( roomAddress == null ) {
+    public GroupChatRoom getGroupChat(EntityBareJid roomAddress) throws ChatNotFoundException {
+        if (roomAddress == null) {
             throw new ChatNotFoundException();
         }
-		return getGroupChat(roomAddress.toString());
-	}
+        return getGroupChat(roomAddress.toString());
+    }
 
     /**
      * Returns the MultiUserChat associated with the specified roomname.
@@ -197,7 +197,7 @@ public class ChatManager {
     public GroupChatRoom getGroupChat(String roomName) throws ChatNotFoundException {
         for (ChatRoom chatRoom : getChatContainer().getChatRooms()) {
             if (chatRoom instanceof GroupChatRoom) {
-                GroupChatRoom groupChat = (GroupChatRoom)chatRoom;
+                GroupChatRoom groupChat = (GroupChatRoom) chatRoom;
                 if (groupChat.getBareJid().equals(roomName)) {
                     return groupChat;
                 }
@@ -222,8 +222,7 @@ public class ChatManager {
         ChatRoom chatRoom;
         try {
             chatRoom = getChatContainer().getChatRoom(jid);
-        }
-        catch (ChatRoomNotFoundException e) {
+        } catch (ChatRoomNotFoundException e) {
             chatRoom = UIComponentRegistry.createChatRoom(jid, nickname, title);
             getChatContainer().addChatRoom(chatRoom);
         }
@@ -244,16 +243,14 @@ public class ChatManager {
         ChatRoom chatRoom;
         try {
             chatRoom = getChatContainer().getChatRoom(jid);
-        }
-        catch (ChatRoomNotFoundException e) {
+        } catch (ChatRoomNotFoundException e) {
             ContactList contactList = SparkManager.getWorkspace().getContactList();
             ContactItem item = contactList.getContactItemByJID(jid);
             if (item != null) {
                 String nicknameString = item.getDisplayName();
                 Resourcepart nickname = Resourcepart.fromOrThrowUnchecked(nicknameString);
                 chatRoom = UIComponentRegistry.createChatRoom(jid, nickname, nickname);
-            }
-            else {
+            } else {
                 // TODO Better nickname?
                 Resourcepart nickname = Resourcepart.EMPTY;
                 chatRoom = UIComponentRegistry.createChatRoom(jid, nickname, jid);
@@ -275,7 +272,7 @@ public class ChatManager {
      */
     public ChatRoom createConferenceRoom(Localpart roomName, DomainBareJid serviceName) {
         EntityBareJid roomAddress = JidCreate.entityBareFrom(roomName, serviceName);
-        final MultiUserChat chatRoom = MultiUserChatManager.getInstanceFor( SparkManager.getConnection()).getMultiUserChat( roomAddress);
+        final MultiUserChat chatRoom = MultiUserChatManager.getInstanceFor(SparkManager.getConnection()).getMultiUserChat(roomAddress);
 
         final GroupChatRoom room = UIComponentRegistry.createGroupChatRoom(chatRoom);
 
@@ -283,8 +280,7 @@ public class ChatManager {
             LocalPreferences pref = SettingsManager.getLocalPreferences();
             Resourcepart nickname = pref.getNickname();
             chatRoom.create(nickname).makeInstant();
-        }
-        catch (XMPPException | SmackException | InterruptedException e1) {
+        } catch (XMPPException | SmackException | InterruptedException e1) {
             Log.error("Unable to send conference room chat configuration form.", e1);
             return null;
         }
@@ -308,11 +304,10 @@ public class ChatManager {
             ChatRoom chatRoom;
 
             @Override
-			public Object construct() {
+            public Object construct() {
                 try {
                     Thread.sleep(10);
-                }
-                catch (InterruptedException e) {
+                } catch (InterruptedException e) {
                     Log.error("Error in activate chat.", e);
                 }
 
@@ -320,15 +315,14 @@ public class ChatManager {
 
                 try {
                     chatRoom = chatRooms.getChatRoom(jid);
-                }
-                catch (ChatRoomNotFoundException e) {
+                } catch (ChatRoomNotFoundException e) {
                     // Do nothing
                 }
                 return chatRoom;
             }
 
             @Override
-			public void finished() {
+            public void finished() {
                 if (chatRoom == null) {
                     chatRoom = UIComponentRegistry.createChatRoom(jid, nickname, nickname);
                     chatManager.getChatContainer().addChatRoom(chatRoom);
@@ -350,8 +344,7 @@ public class ChatManager {
     public boolean chatRoomExists(String jid) {
         try {
             getChatContainer().getChatRoom(jid);
-        }
-        catch (ChatRoomNotFoundException e) {
+        } catch (ChatRoomNotFoundException e) {
             return false;
         }
         return true;
@@ -399,17 +392,12 @@ public class ChatManager {
      * @param chatRoom the <code>ChatRoom</code> where the message was sent to.
      * @param message  the <code>Message</code>
      */
-    public void fireGlobalMessageReceievedListeners( ChatRoom chatRoom, Message message )
-    {
-        for ( GlobalMessageListener listener : globalMessageListeners )
-        {
-            try
-            {
-                listener.messageReceived( chatRoom, message );
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A GlobalMessageListener ('" + listener + "') threw an exception while processing an incoming chat message (from '" + message.getFrom() + "') in a chat room ('" + chatRoom + "').", e );
+    public void fireGlobalMessageReceievedListeners(ChatRoom chatRoom, Message message) {
+        for (GlobalMessageListener listener : globalMessageListeners) {
+            try {
+                listener.messageReceived(chatRoom, message);
+            } catch (Exception e) {
+                Log.error("A GlobalMessageListener ('" + listener + "') threw an exception while processing an incoming chat message (from '" + message.getFrom() + "') in a chat room ('" + chatRoom + "').", e);
             }
         }
     }
@@ -420,17 +408,12 @@ public class ChatManager {
      * @param chatRoom the <code>ChatRoom</code> where the message was sent from.
      * @param message  the <code>Message</code> sent.
      */
-    public void fireGlobalMessageSentListeners( ChatRoom chatRoom, Message message )
-    {
-        for ( GlobalMessageListener listener : globalMessageListeners )
-        {
-            try
-            {
-                listener.messageSent( chatRoom, message );
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A GlobalMessageListener ('" + listener + "') threw an exception while processing an outgoing chat message (to '" + message.getTo() + "') in a chat room ('" + chatRoom + "').", e );
+    public void fireGlobalMessageSentListeners(ChatRoom chatRoom, Message message) {
+        for (GlobalMessageListener listener : globalMessageListeners) {
+            try {
+                listener.messageSent(chatRoom, message);
+            } catch (Exception e) {
+                Log.error("A GlobalMessageListener ('" + listener + "') threw an exception while processing an outgoing chat message (to '" + message.getTo() + "') in a chat room ('" + chatRoom + "').", e);
             }
         }
     }
@@ -441,27 +424,19 @@ public class ChatManager {
      * @param room    the room the message belongs to.
      * @param message the message to filter.
      */
-    public void filterIncomingMessage( ChatRoom room, Message message )
-    {
-        try
-        {
+    public void filterIncomingMessage(ChatRoom room, Message message) {
+        try {
             // TODO This probably does not belong here (but in a filter?)
-            cancelledNotification( message.getFrom(), ChatState.paused );
-        }
-        catch ( Exception e )
-        {
-            Log.error( e );
+            cancelledNotification(message.getFrom(), ChatState.paused);
+        } catch (Exception e) {
+            Log.error(e);
         }
 
-        for ( final MessageFilter filter : messageFilters )
-        {
-            try
-            {
-                filter.filterIncoming( room, message );
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A MessageFilter ('" + filter + "') threw an exception while processing an incoming chat message (from '" + message.getFrom() + "') in a chat room ('" + room + "').", e );
+        for (final MessageFilter filter : messageFilters) {
+            try {
+                filter.filterIncoming(room, message);
+            } catch (Exception e) {
+                Log.error("A MessageFilter ('" + filter + "') threw an exception while processing an incoming chat message (from '" + message.getFrom() + "') in a chat room ('" + room + "').", e);
             }
         }
     }
@@ -472,17 +447,12 @@ public class ChatManager {
      * @param room    the <code>ChatRoom</code> the message belongs too.
      * @param message the <code>Message</code> being sent.
      */
-    public void filterOutgoingMessage( ChatRoom room, Message message )
-    {
-        for ( final MessageFilter filter : messageFilters )
-        {
-            try
-            {
-                filter.filterOutgoing( room, message );
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A MessageFilter ('" + filter + "') threw an exception while processing an outgoing chat message (from '" + message.getFrom() + "') in a chat room ('" + room + "').", e );
+    public void filterOutgoingMessage(ChatRoom room, Message message) {
+        for (final MessageFilter filter : messageFilters) {
+            try {
+                filter.filterOutgoing(room, message);
+            } catch (Exception e) {
+                Log.error("A MessageFilter ('" + filter + "') threw an exception while processing an outgoing chat message (from '" + message.getFrom() + "') in a chat room ('" + room + "').", e);
             }
         }
     }
@@ -522,13 +492,12 @@ public class ChatManager {
     public String getDefaultConferenceService() {
         if (conferenceService == null) {
             try {
-                final MultiUserChatManager multiUserChatManager = MultiUserChatManager.getInstanceFor( SparkManager.getConnection() );
+                final MultiUserChatManager multiUserChatManager = MultiUserChatManager.getInstanceFor(SparkManager.getConnection());
                 List<DomainBareJid> col = multiUserChatManager.getMucServiceDomains();
                 if (col.size() > 0) {
                     conferenceService = col.iterator().next().toString();
                 }
-            }
-            catch (XMPPException | SmackException | InterruptedException e) {
+            } catch (XMPPException | SmackException | InterruptedException e) {
                 Log.error(e);
             }
         }
@@ -544,13 +513,13 @@ public class ChatManager {
     public void addContactItemHandler(ContactItemHandler handler) {
         contactItemHandlers.add(handler);
     }
-    
+
     public void addChatMessageHandler(ChatMessageHandler handler) {
-    	chatMessageHandlers.add(handler);
+        chatMessageHandlers.add(handler);
     }
-    
+
     public void removeChatMessageHandler(ChatMessageHandler handler) {
-    	chatMessageHandlers.remove(handler);
+        chatMessageHandlers.remove(handler);
     }
 
     /**
@@ -562,17 +531,12 @@ public class ChatManager {
         contactItemHandlers.remove(handler);
     }
 
-    public void fireMessageReceived( Message message )
-    {
-        for ( ChatMessageHandler handler : chatMessageHandlers )
-        {
-            try
-            {
-                handler.messageReceived( message );
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A ChatMessageHandler ('" + handler + "') threw an exception while processing this message: " + message, e );
+    public void fireMessageReceived(Message message) {
+        for (ChatMessageHandler handler : chatMessageHandlers) {
+            try {
+                handler.messageReceived(message);
+            } catch (Exception e) {
+                Log.error("A ChatMessageHandler ('" + handler + "') threw an exception while processing this message: " + message, e);
             }
         }
     }
@@ -584,20 +548,14 @@ public class ChatManager {
      * @param presence the new presence.
      * @return true if it was handled.
      */
-    public boolean fireContactItemPresenceChanged( ContactItem item, Presence presence )
-    {
-        for ( ContactItemHandler handler : contactItemHandlers )
-        {
-            try
-            {
-                if ( handler.handlePresence( item, presence ) )
-                {
+    public boolean fireContactItemPresenceChanged(ContactItem item, Presence presence) {
+        for (ContactItemHandler handler : contactItemHandlers) {
+            try {
+                if (handler.handlePresence(item, presence)) {
                     return true;
                 }
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A ContactItemHandler ('" + handler + "') threw an exception while processing a presence change (ContactItem: '" + item + "', presence: [" + presence + "])", e );
+            } catch (Exception e) {
+                Log.error("A ContactItemHandler ('" + handler + "') threw an exception while processing a presence change (ContactItem: '" + item + "', presence: [" + presence + "])", e);
             }
         }
 
@@ -610,20 +568,14 @@ public class ChatManager {
      * @param item the ContactItem that was double clicked.
      * @return true if the event was intercepted and handled.
      */
-    public boolean fireContactItemDoubleClicked( ContactItem item )
-    {
-        for ( ContactItemHandler handler : contactItemHandlers )
-        {
-            try
-            {
-                if ( handler.handleDoubleClick( item ) )
-                {
+    public boolean fireContactItemDoubleClicked(ContactItem item) {
+        for (ContactItemHandler handler : contactItemHandlers) {
+            try {
+                if (handler.handleDoubleClick(item)) {
                     return true;
                 }
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A ContactItemHandler ('" + handler + "') threw an exception while processing a double click on ContactItem: '" + item + "'.", e );
+            } catch (Exception e) {
+                Log.error("A ContactItemHandler ('" + handler + "') threw an exception while processing a double click on ContactItem: '" + item + "'.", e);
             }
         }
 
@@ -636,22 +588,16 @@ public class ChatManager {
      * @param jid the jid.
      * @return the icon of the handler.
      */
-    public Icon getIconForContactHandler( String jid )
-    {
+    public Icon getIconForContactHandler(String jid) {
         BareJid bareJid = JidCreate.bareFromOrThrowUnchecked(jid);
-        for ( ContactItemHandler handler : contactItemHandlers )
-        {
-            try
-            {
-                Icon icon = handler.getIcon( bareJid );
-                if ( icon != null )
-                {
+        for (ContactItemHandler handler : contactItemHandlers) {
+            try {
+                Icon icon = handler.getIcon(bareJid);
+                if (icon != null) {
                     return icon;
                 }
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A ContactItemHandler ('" + handler + "') threw an exception while processing an icon request for: '" + jid + "'.", e );
+            } catch (Exception e) {
+                Log.error("A ContactItemHandler ('" + handler + "') threw an exception while processing an icon request for: '" + jid + "'.", e);
             }
         }
 
@@ -664,21 +610,15 @@ public class ChatManager {
      * @param presence the presence.
      * @return the icon.
      */
-    public Icon getTabIconForContactHandler( Presence presence )
-    {
-        for ( ContactItemHandler handler : contactItemHandlers )
-        {
-            try
-            {
-                Icon icon = handler.getTabIcon( presence );
-                if ( icon != null )
-                {
+    public Icon getTabIconForContactHandler(Presence presence) {
+        for (ContactItemHandler handler : contactItemHandlers) {
+            try {
+                Icon icon = handler.getTabIcon(presence);
+                if (icon != null) {
                     return icon;
                 }
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A ContactItemHandler ('" + handler + "') threw an exception while processing a tab icon request for: '" + presence + "'.", e );
+            } catch (Exception e) {
+                Log.error("A ContactItemHandler ('" + handler + "') threw an exception while processing a tab icon request for: '" + presence + "'.", e);
             }
         }
 
@@ -686,28 +626,27 @@ public class ChatManager {
     }
 
     public void composingNotification(final Jid from) {
-        SwingUtilities.invokeLater( () -> {
+        SwingUtilities.invokeLater(() -> {
             final ContactList contactList = SparkManager.getWorkspace().getContactList();
 
             ChatRoom chatRoom;
             try {
-                chatRoom = getChatContainer().getChatRoom( from.asBareJid() );
+                chatRoom = getChatContainer().getChatRoom(from.asBareJid());
                 if (chatRoom instanceof ChatRoomImpl) {
                     typingNotificationList.add(chatRoom);
                     // Notify Decorators
                     notifySparkTabHandlers(chatRoom);
-                    ((ChatRoomImpl)chatRoom).notifyChatStateChange(ChatState.composing);
+                    ((ChatRoomImpl) chatRoom).notifyChatStateChange(ChatState.composing);
                 }
-            }
-            catch (ChatRoomNotFoundException e) {
+            } catch (ChatRoomNotFoundException e) {
                 // Do nothing
             }
             contactList.setIconFor(from, SparkRes.getImageIcon(SparkRes.SMALL_MESSAGE_EDIT_IMAGE));
-        } );
+        });
     }
 
     public void cancelledNotification(final Jid from, final ChatState state) {
-        SwingUtilities.invokeLater( () -> {
+        SwingUtilities.invokeLater(() -> {
             ContactList contactList = SparkManager.getWorkspace().getContactList();
 
             ChatRoom chatRoom;
@@ -717,14 +656,13 @@ public class ChatManager {
                     typingNotificationList.remove(chatRoom);
                     // Notify Decorators
                     notifySparkTabHandlers(chatRoom);
-                    ((ChatRoomImpl)chatRoom).notifyChatStateChange(state);
+                    ((ChatRoomImpl) chatRoom).notifyChatStateChange(state);
                 }
-            }
-            catch (ChatRoomNotFoundException e) {
+            } catch (ChatRoomNotFoundException e) {
                 // Do nothing
             }
             contactList.useDefaults(from);
-        } );
+        });
     }
 
     /**
@@ -818,29 +756,22 @@ public class ChatManager {
      *
      * @param component the component within the tab.
      */
-    public void notifySparkTabHandlers( Component component )
-    {
-        final SparkTab tab = chatContainer.getTabContainingComponent( component );
-        if ( tab == null )
-        {
+    public void notifySparkTabHandlers(Component component) {
+        final SparkTab tab = chatContainer.getTabContainingComponent(component);
+        if (tab == null) {
             return;
         }
         boolean isChatFrameInFocus = getChatContainer().getChatFrame().isInFocus();
         boolean isSelectedTab = getChatContainer().getSelectedComponent() == component;
-        for ( SparkTabHandler decorator : sparkTabHandlers )
-        {
-            try
-            {
-                boolean isHandled = decorator.isTabHandled( tab, component, isSelectedTab, isChatFrameInFocus );
-                if ( isHandled )
-                {
+        for (SparkTabHandler decorator : sparkTabHandlers) {
+            try {
+                boolean isHandled = decorator.isTabHandled(tab, component, isSelectedTab, isChatFrameInFocus);
+                if (isHandled) {
                     tab.validateTab();
                     return;
                 }
-            }
-            catch ( Exception e )
-            {
-                Log.error( "A SparkTabHandler ('" + decorator + "') threw an exception.", e );
+            } catch (Exception e) {
+                Log.error("A SparkTabHandler ('" + decorator + "') threw an exception.", e);
             }
         }
     }
@@ -862,69 +793,69 @@ public class ChatManager {
      *            the arguments passed into Spark.
      */
     public void handleURIMapping(String arguments) {
-	if (arguments == null) {
-	    return;
-	}
+        if (arguments == null) {
+            return;
+        }
 
-	Log.debug("Handling URI mapping for: " + arguments);
-	URI uri;
-	try {
-	    uri = new URI(arguments);
-	} catch (URISyntaxException e) {
-	    Log.error("error parsing uri: "+arguments,e);
-	    return;
-	}
-	if (!"xmpp".equalsIgnoreCase(uri.getScheme())) {
-	    return;
-	}
+        Log.debug("Handling URI mapping for: " + arguments);
+        URI uri;
+        try {
+            uri = new URI(arguments);
+        } catch (URISyntaxException e) {
+            Log.error("error parsing uri: " + arguments, e);
+            return;
+        }
+        if (!"xmpp".equalsIgnoreCase(uri.getScheme())) {
+            return;
+        }
 
-	String query = uri.getQuery();
-	if (query == null) {
-	    // No query string, so assume the URI is xmpp:JID
-	    EntityBareJid jid = _uriManager.retrieveJID(uri).asEntityBareJidOrThrow();
+        String query = uri.getQuery();
+        if (query == null) {
+            // No query string, so assume the URI is xmpp:JID
+            EntityBareJid jid = _uriManager.retrieveJID(uri).asEntityBareJidOrThrow();
 
-	    UserManager userManager = SparkManager.getUserManager();
-	    String nickname = userManager.getUserNicknameFromJID(jid);
-	    ChatManager chatManager = SparkManager.getChatManager();
-	    ChatRoom chatRoom = chatManager.createChatRoom(jid, nickname, nickname);
-	    chatManager.getChatContainer().activateChatRoom(chatRoom);
-	} else if (query.startsWith(UriManager.uritypes.message.getXML())) {
-	    try {
-		_uriManager.handleMessage(uri);
-	    } catch (Exception e) {
-		Log.error("error with ?message URI", e);
-	    }
-	} else if (query.startsWith(UriManager.uritypes.join.getXML())) {
-	    try {
-		_uriManager.handleConference(uri);
-	    } catch (Exception e) {
-		Log.error("error with ?join URI", e);
-	    }
-	} else if (query.startsWith(UriManager.uritypes.subscribe.getXML())) {
-	    try {
-		_uriManager.handleSubscribe(uri);
-	    } catch (Exception e) {
-		Log.error("error with ?subscribe URI", e);
-	    }
-	} else if (query.startsWith(UriManager.uritypes.unsubscribe.getXML())) {
-	    try {
-		_uriManager.handleUnsubscribe(uri);
-	    } catch (Exception e) {
-		Log.error("error with ?unsubscribe URI", e);
-	    }
-	} else if (query.startsWith(UriManager.uritypes.roster.getXML())) {
-	    try {
-		_uriManager.handleRoster(uri);
-	    } catch (Exception e) {
-		Log.error("error with ?roster URI", e);
-	    }
-	} else if (query.startsWith(UriManager.uritypes.remove.getXML())) {
-	    try {
-		_uriManager.handleRemove(uri);
-	    } catch (Exception e) {
-		Log.error("error with ?remove URI", e);
-	    }
-	}
+            UserManager userManager = SparkManager.getUserManager();
+            String nickname = userManager.getUserNicknameFromJID(jid);
+            ChatManager chatManager = SparkManager.getChatManager();
+            ChatRoom chatRoom = chatManager.createChatRoom(jid, nickname, nickname);
+            chatManager.getChatContainer().activateChatRoom(chatRoom);
+        } else if (query.startsWith(UriManager.uritypes.message.getXML())) {
+            try {
+                _uriManager.handleMessage(uri);
+            } catch (Exception e) {
+                Log.error("error with ?message URI", e);
+            }
+        } else if (query.startsWith(UriManager.uritypes.join.getXML())) {
+            try {
+                _uriManager.handleConference(uri);
+            } catch (Exception e) {
+                Log.error("error with ?join URI", e);
+            }
+        } else if (query.startsWith(UriManager.uritypes.subscribe.getXML())) {
+            try {
+                _uriManager.handleSubscribe(uri);
+            } catch (Exception e) {
+                Log.error("error with ?subscribe URI", e);
+            }
+        } else if (query.startsWith(UriManager.uritypes.unsubscribe.getXML())) {
+            try {
+                _uriManager.handleUnsubscribe(uri);
+            } catch (Exception e) {
+                Log.error("error with ?unsubscribe URI", e);
+            }
+        } else if (query.startsWith(UriManager.uritypes.roster.getXML())) {
+            try {
+                _uriManager.handleRoster(uri);
+            } catch (Exception e) {
+                Log.error("error with ?roster URI", e);
+            }
+        } else if (query.startsWith(UriManager.uritypes.remove.getXML())) {
+            try {
+                _uriManager.handleRemove(uri);
+            } catch (Exception e) {
+                Log.error("error with ?remove URI", e);
+            }
+        }
     }
 
     /**
@@ -938,15 +869,15 @@ public class ChatManager {
          * @param chat the chat that is concerned by this event.
          * @param state the new state of the chat.
          */
-    	@Override
+        @Override
         public void stateChanged(Chat chat, ChatState state, Message message) {
-    	    Jid participant = chat.getXmppAddressOfChatPartner();
+            Jid participant = chat.getXmppAddressOfChatPartner();
             if (ChatState.composing.equals(state)) {
                 composingNotification(participant);
             } else {
-            	cancelledNotification(participant, state);
+                cancelledNotification(participant, state);
             }
-            
+
         }
     }
 }
