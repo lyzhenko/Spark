@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jivesoftware.spellchecker;
+package com.alexqsoft.yandexspellchecker;
 
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.plugin.Plugin;
@@ -21,7 +21,7 @@ import org.jivesoftware.spark.plugin.Plugin;
 /**
  * This Plugin provides realtime typo detection and suggestions
  */
-public class SpellcheckerPlugin implements Plugin {
+public class YandexSpellcheckerPlugin implements Plugin {
     private SpellcheckChatRoomListener listener;
     private SpellcheckerPreference preference;
 

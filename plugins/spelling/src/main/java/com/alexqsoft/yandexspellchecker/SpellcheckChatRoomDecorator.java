@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jivesoftware.spellchecker;
+package com.alexqsoft.yandexspellchecker;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
