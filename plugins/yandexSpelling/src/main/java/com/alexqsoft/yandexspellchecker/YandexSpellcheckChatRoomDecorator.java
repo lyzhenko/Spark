@@ -39,7 +39,7 @@ import org.jivesoftware.spark.util.GraphicUtils;
  * This Class adds the SpellCheckButton to the ChatWindow and implements the
  * ActionListener to react on buttonclicks
  */
-public class SpellcheckChatRoomDecorator implements ActionListener,
+public class YandexSpellcheckChatRoomDecorator implements ActionListener,
     ChatRoomClosingListener {
     private JTextComponentSpellChecker _sc;
     private RolloverButton _spellingButton;
@@ -47,7 +47,7 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
     private JComboBox<String> _languageSelection = new JComboBox<>();
     private Map<String, String> _languages;
 
-    public SpellcheckChatRoomDecorator(ChatRoom room) {
+    public YandexSpellcheckChatRoomDecorator(ChatRoom room) {
         _room = room;
 
         SwingWorker worker = new SwingWorker() {
@@ -58,11 +58,11 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
 
             public void finished() {
 
-                final SpellcheckerPreference preference = (SpellcheckerPreference) SparkManager
+                final YandexSpellcheckerPreference preference = (YandexSpellcheckerPreference) SparkManager
                     .getPreferenceManager().getPreference(
-                        SpellcheckerPreference.NAMESPACE);
+                        YandexSpellcheckerPreference.NAMESPACE);
                 if (preference.getPreferences().isSpellCheckerEnabled()) {
-                    _sc = new JTextComponentSpellChecker(SpellcheckManager
+                    _sc = new JTextComponentSpellChecker(YandexSpellcheckManager
                         .getInstance().getSpellChecker());
 
                     languagestoLocales();
@@ -74,7 +74,7 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
                         public void actionPerformed(ActionEvent e) {
                             String lang = _languages.get((String) _languageSelection.getSelectedItem());
                             _sc.stopRealtimeMarkErrors();
-                            _sc = new JTextComponentSpellChecker(new SpellChecker(SpellcheckManager.getInstance().getDictionary(lang)));
+                            _sc = new JTextComponentSpellChecker(new SpellChecker(YandexSpellcheckManager.getInstance().getDictionary(lang)));
 
                             if (preference.getPreferences().getIgnoreUppercase()) {
                                 _sc.getSpellChecker().setIgnoreUpperCaseWords(true);
@@ -94,9 +94,9 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
                         cl.getResource("text_ok.png"));
                     _spellingButton = new RolloverButton(spellingIcon);
                     _spellingButton.setToolTipText(GraphicUtils
-                        .createToolTip(SpellcheckerResource.getString("button.check.spelling")));
+                        .createToolTip(YandexSpellcheckerResource.getString("button.check.spelling")));
                     _spellingButton
-                        .addActionListener(SpellcheckChatRoomDecorator.this);
+                        .addActionListener(YandexSpellcheckChatRoomDecorator.this);
                     _room.getEditorBar().add(_spellingButton);
                     if (preference.getPreferences().getLanguageSelectionInChatRoom()) {
                         _room.getEditorBar().add(_languageSelection);
@@ -125,7 +125,7 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
     public void actionPerformed(ActionEvent event) {
         if (_sc.spellCheck(_room.getChatInputEditor())) {
             JOptionPane.showMessageDialog(_room.getChatInputEditor(),
-                SpellcheckerResource
+                YandexSpellcheckerResource
                     .getString("dialog.no.mistakes"));
             _room.getChatInputEditor().requestFocusInWindow();
         }
@@ -138,10 +138,10 @@ public class SpellcheckChatRoomDecorator implements ActionListener,
     }
 
     private void languagestoLocales() {
-        String spellLanguage = SpellcheckManager.getInstance().getSpellcheckerPreference().getPreferences().getSpellLanguage();
+        String spellLanguage = YandexSpellcheckManager.getInstance().getSpellcheckerPreference().getPreferences().getSpellLanguage();
         _languages = new HashMap<>();
         Locale[] locales = Locale.getAvailableLocales();
-        ArrayList<String> languages = SpellcheckManager.getInstance().getSupportedLanguages();
+        ArrayList<String> languages = YandexSpellcheckManager.getInstance().getSupportedLanguages();
         for (String language : languages) {
             for (final Locale locale : locales) {
                 if (locale.toString().equals(language)) {

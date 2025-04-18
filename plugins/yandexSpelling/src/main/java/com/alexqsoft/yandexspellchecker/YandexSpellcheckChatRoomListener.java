@@ -22,12 +22,12 @@ import org.jivesoftware.spark.ui.ChatRoomListener;
  * SpellcheckChatRoomListener</p> Class used to activate Spellchecking on
  * RoomOpen
  */
-public class SpellcheckChatRoomListener implements ChatRoomListener {
+public class YandexSpellcheckChatRoomListener implements ChatRoomListener {
 
     /**
-     * Creates {@link SpellcheckChatRoomListener}
+     * Creates {@link YandexSpellcheckChatRoomListener}
      */
-    public SpellcheckChatRoomListener() {
+    public YandexSpellcheckChatRoomListener() {
     }
 
     public void chatRoomActivated(ChatRoom room) {
@@ -43,7 +43,7 @@ public class SpellcheckChatRoomListener implements ChatRoomListener {
     }
 
     public void chatRoomOpened(ChatRoom room) {
-	new SpellcheckChatRoomDecorator(room);
+	new YandexSpellcheckChatRoomDecorator(room);
     }
 
     public void userHasJoined(ChatRoom room, String userid) {

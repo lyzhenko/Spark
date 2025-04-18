@@ -32,7 +32,7 @@ import javax.swing.JPanel;
 import org.jivesoftware.spark.component.VerticalFlowLayout;
 import org.jivesoftware.spark.util.ResourceUtils;
 
-public class SpellcheckerPreferenceDialog extends JPanel implements
+public class YandexSpellcheckerPreferenceDialog extends JPanel implements
 	ActionListener {
     private static final long serialVersionUID = -1836601903928057855L;
 
@@ -46,7 +46,7 @@ public class SpellcheckerPreferenceDialog extends JPanel implements
     private Locale[] locales;
     ArrayList<String> languages;
 
-    public SpellcheckerPreferenceDialog(ArrayList<String> languages) {
+    public YandexSpellcheckerPreferenceDialog(ArrayList<String> languages) {
 	this.languages = languages;
 	locales = Locale.getAvailableLocales();
 	spellPanel = new JPanel();
@@ -92,21 +92,21 @@ public class SpellcheckerPreferenceDialog extends JPanel implements
 	spellPanel.add(ignoreCase, new GridBagConstraints(0, 4, 2, 1, 1.0, 1.0, GridBagConstraints.NORTHWEST, GridBagConstraints.NONE, new Insets(5, 5, 5, 5), 0, 0));
 
 	// Setup MNEMORICS
-	ResourceUtils.resButton(spellcheckingEnabled, SpellcheckerResource
+	ResourceUtils.resButton(spellcheckingEnabled, YandexSpellcheckerResource
 		.getString("preference.spellcheckingEnabled"));
-	ResourceUtils.resButton(autospellcheckingEnabled, SpellcheckerResource
+	ResourceUtils.resButton(autospellcheckingEnabled, YandexSpellcheckerResource
 		.getString("preference.autoSpellcheckingEnabled"));
 	ResourceUtils.resLabel(lLanguage, spellLanguages,
-		SpellcheckerResource.getString("preference.language"));
+		YandexSpellcheckerResource.getString("preference.language"));
 	
 	ResourceUtils.resButton(ignoreCase, 
-		SpellcheckerResource.getString("preference.ignore.uppercasedword"));
-	ResourceUtils.resButton(showLanguages, SpellcheckerResource
+		YandexSpellcheckerResource.getString("preference.ignore.uppercasedword"));
+	ResourceUtils.resButton(showLanguages, YandexSpellcheckerResource
                 .getString("preference.show.langauage.in.chat.windows"));
 	
 	setLayout(new VerticalFlowLayout());
 	spellPanel.setBorder(BorderFactory
-		.createTitledBorder(SpellcheckerResource
+		.createTitledBorder(YandexSpellcheckerResource
 			.getString("title.spellchecker")));
 	add(spellPanel);
     }

@@ -31,26 +31,26 @@ import org.dts.spell.dictionary.SpellDictionary;
 import org.jivesoftware.spark.SparkManager;
 import org.jivesoftware.spark.util.log.Log;
 
-public class SpellcheckManager {
-    private static SpellcheckManager instance = null;
+public class YandexSpellcheckManager {
+    private static YandexSpellcheckManager instance = null;
     private SpellChecker checker;
     private ArrayList<String> languages;
-    private SpellcheckerPreference preferences;
+    private YandexSpellcheckerPreference preferences;
 
-    public static SpellcheckManager getInstance() {
+    public static YandexSpellcheckManager getInstance() {
         if (instance == null) {
-            instance = new SpellcheckManager();
+            instance = new YandexSpellcheckManager();
         }
 
         return instance;
     }
 
-    private SpellcheckManager() {
+    private YandexSpellcheckManager() {
 
         loadSupportedLanguages();
 
         try {
-            preferences = new SpellcheckerPreference(languages);
+            preferences = new YandexSpellcheckerPreference(languages);
 
             String language = SparkManager.getMainWindow().getLocale()
                 .getLanguage();
@@ -87,7 +87,7 @@ public class SpellcheckManager {
         return dict;
     }
 
-    public SpellcheckerPreference getSpellcheckerPreference() {
+    public YandexSpellcheckerPreference getSpellcheckerPreference() {
         return preferences;
     }
 

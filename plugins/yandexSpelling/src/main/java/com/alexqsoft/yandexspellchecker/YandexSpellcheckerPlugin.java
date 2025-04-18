@@ -22,8 +22,8 @@ import org.jivesoftware.spark.plugin.Plugin;
  * This Plugin provides realtime typo detection and suggestions
  */
 public class YandexSpellcheckerPlugin implements Plugin {
-    private SpellcheckChatRoomListener listener;
-    private SpellcheckerPreference preference;
+    private YandexSpellcheckChatRoomListener listener;
+    private YandexSpellcheckerPreference preference;
 
     public boolean canShutDown() {
         return true;
@@ -32,11 +32,11 @@ public class YandexSpellcheckerPlugin implements Plugin {
     public void initialize() {
 
         try {
-            preference = SpellcheckManager.getInstance()
+            preference = YandexSpellcheckManager.getInstance()
                 .getSpellcheckerPreference();
             SparkManager.getPreferenceManager().addPreference(preference);
 
-            listener = new SpellcheckChatRoomListener();
+            listener = new YandexSpellcheckChatRoomListener();
             SparkManager.getChatManager().addChatRoomListener(listener);
         } catch (Exception e) {
             e.printStackTrace();

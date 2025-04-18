@@ -27,10 +27,10 @@ import org.jivesoftware.spark.preference.Preference;
 /**
  * Class used to acquire the Preferences set for this plugin by the User
  */
-public class SpellcheckerPreference implements Preference {
+public class YandexSpellcheckerPreference implements Preference {
     public static String NAMESPACE = "spellchecking";
-    private SpellcheckerPreferenceDialog dialog;
-    private SpellcheckerPreferences preferences;
+    private YandexSpellcheckerPreferenceDialog dialog;
+    private YandexSpellcheckerPreferences preferences;
 
     /**
      * Intializes the SpellcheckerPreference
@@ -38,17 +38,17 @@ public class SpellcheckerPreference implements Preference {
      * @param languages
      *            , an {@link ArrayList} of {@link String} containing the supported languages
      */
-    public SpellcheckerPreference(final ArrayList<String> languages) {
-	preferences = new SpellcheckerPreferences();
+    public YandexSpellcheckerPreference(final ArrayList<String> languages) {
+	preferences = new YandexSpellcheckerPreferences();
 	try {
 	    if (EventQueue.isDispatchThread()) {
-		dialog = new SpellcheckerPreferenceDialog(languages);
+		dialog = new YandexSpellcheckerPreferenceDialog(languages);
 	    } else {
 		EventQueue.invokeAndWait(new Runnable() {
 
 		    @Override
 		    public void run() {
-			dialog = new SpellcheckerPreferenceDialog(languages);
+			dialog = new YandexSpellcheckerPreferenceDialog(languages);
 
 		    }
 		});
@@ -62,9 +62,9 @@ public class SpellcheckerPreference implements Preference {
     /**
      * Returns the Preferences
      * 
-     * @return {@link SpellcheckerPreference}
+     * @return {@link YandexSpellcheckerPreference}
      */
-    public SpellcheckerPreferences getPreferences() {
+    public YandexSpellcheckerPreferences getPreferences() {
 	return preferences;
     }
 
@@ -75,7 +75,7 @@ public class SpellcheckerPreference implements Preference {
 	preferences.setSpellLanguage(dialog.getSelectedLanguage());
 	preferences.setIgnoreUppercase(dialog.getIgnoreUppercase());
 	preferences.setLanguageSelectionInChatRoom(dialog.getEnableLanuageSelection());
-	SpellcheckManager.getInstance().loadDictionary(dialog.getSelectedLanguage());
+	YandexSpellcheckManager.getInstance().loadDictionary(dialog.getSelectedLanguage());
 	preferences.save();
     }
 
@@ -97,7 +97,7 @@ public class SpellcheckerPreference implements Preference {
     }
 
     public String getListName() {
-	return SpellcheckerResource.getString("title.spellchecker");
+	return YandexSpellcheckerResource.getString("title.spellchecker");
     }
 
     public String getNamespace() {
@@ -105,11 +105,11 @@ public class SpellcheckerPreference implements Preference {
     }
 
     public String getTitle() {
-	return SpellcheckerResource.getString("title.spellchecker");
+	return YandexSpellcheckerResource.getString("title.spellchecker");
     }
 
     public String getTooltip() {
-	return SpellcheckerResource.getString("title.spellchecker");
+	return YandexSpellcheckerResource.getString("title.spellchecker");
     }
 
     public boolean isDataValid() {

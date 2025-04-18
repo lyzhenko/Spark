@@ -22,10 +22,10 @@ import java.util.ResourceBundle;
 import org.jivesoftware.resource.UTF8Control;
 import org.jivesoftware.spark.util.log.Log;
 
-public class SpellcheckerResource {
+public class YandexSpellcheckerResource {
     private static PropertyResourceBundle prb;
 
-    static ClassLoader cl = SpellcheckerResource.class.getClassLoader();
+    static ClassLoader cl = YandexSpellcheckerResource.class.getClassLoader();
 
     static {
         prb = (PropertyResourceBundle) ResourceBundle.getBundle("i18n/spellchecker_i18n", new UTF8Control());

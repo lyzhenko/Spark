@@ -24,11 +24,11 @@ import java.util.Properties;
 
 import org.jivesoftware.Spark;
 
-public class SpellcheckerPreferences {
+public class YandexSpellcheckerPreferences {
     private Properties props;
     private File configFile;
 
-    public SpellcheckerPreferences() {
+    public YandexSpellcheckerPreferences() {
 	this.props = new Properties();
 
 	try {
